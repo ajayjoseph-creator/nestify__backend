@@ -174,26 +174,31 @@ export const sendOtpController = async (req, res) => {
 
   console.log("Generated OTP:", otp);
 
+  // Store OTP with 5-min expiry
+  otpStore.set(email, { otp, expires: Date.now() + 5 * 60 * 1000 });
+
   try {
     await sendOTP(email, otp);
-    res.status(200).json({ message: "OTP sent successfully", otp });
+    res.status(200).json({ message: "OTP sent successfully" });
   } catch (err) {
     console.error("Email error:", err);
     res.status(500).json({ message: "Failed to send OTP" });
   }
 };
 
+// Verify OTP
 export const verifyOtpController = (req, res) => {
-  const { email, otp } = req.body;
+  const { email, otp: userOtp } = req.body; // fix: rename otp to userOtp
   const stored = otpStore.get(email);
 
   if (!stored) return res.status(400).json({ message: "No OTP found" });
   if (Date.now() > stored.expires)
     return res.status(400).json({ message: "OTP expired" });
 
-  if (stored.otp.toString() !== otp.toString())
+  if (stored.otp.toString() !== userOtp.toString())
     return res.status(400).json({ message: "Invalid OTP" });
-  console.log("Expected OTP:", otp);
+
+  console.log("Expected OTP:", stored.otp);
   console.log("User entered OTP:", userOtp);
 
   otpStore.delete(email); // clear OTP after success
