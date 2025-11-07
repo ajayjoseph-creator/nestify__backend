@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   secure: false, // true only if port is 465
   auth: {
     user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    pass: process.env.BREVO_API_KEY,
   },
 });
 
@@ -19,7 +19,7 @@ export const sendOTP = async (to, otp) => {
     subject: "Nestify - Your OTP Code",
     html: `
       <div style="font-family: sans-serif; padding: 20px;">
-        <h2 style="color:#2E7D32;">🔐 OTP Verification</h2>
+        <h2 style="color:#2E7D32;"> OTP Verification</h2>
         <p>Your One-Time Password is:</p>
         <h1 style="letter-spacing: 3px; color:#2E7D32;">${otp}</h1>
         <p>It expires in <b>5 minutes</b>.</p>

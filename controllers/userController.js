@@ -153,7 +153,7 @@ export const updateUserProfile = async (req, res) => {
 
     // 📷 Handle image upload from Cloudinary
     if (req.file) {
-      console.log("📸 Cloudinary file received:", req.file);
+      console.log("Cloudinary file received:", req.file);
 
       // ⚠️ `req.file.path` works if you're using multer-storage-cloudinary
      user.profileImage = req.file.path || req.file.secure_url; // ✅ or req.file.url if needed
