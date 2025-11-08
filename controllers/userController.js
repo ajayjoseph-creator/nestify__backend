@@ -175,7 +175,7 @@ export const sendOtpController = async (req, res) => {
   console.log("Generated OTP:", otp);
 
   // Store OTP with 5-min expiry
-  otpStore.set(email, { otp, expires: Date.now() + 5 * 60 * 1000 });
+  otpStore.set(email, { otp, expires: Date.now() + 10 * 60 * 1000 });
 
   try {
     await sendOTP(email, otp);
